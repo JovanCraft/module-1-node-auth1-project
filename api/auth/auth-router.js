@@ -7,9 +7,10 @@ const {
   checkUsernameExists,
   checkPasswordLength
   } = require('./auth-middleware')
+const bcrypt = require('bcryptjs')
+const User = require('../users/users-model')
 
-
-  const router = express.Router()
+const router = express.Router()
 
 
 /**
@@ -34,8 +35,17 @@ const {
     "message": "Password must be longer than 3 chars"
   }
  */
-router.post('/register', checkPasswordLength, checkUsernameFree, (req, res, next) => {//eslint-disable-line
-  res.json('register configured')
+router.post('/register', checkPasswordLength, checkUsernameFree, async (req, res, next) => {
+  try{
+    const { username, password } = req.body
+    const hash = bcrypt.hashSync(password, 12)
+    const newUser = { username, password: hash }
+    const result = await User.add(newUser)
+    res.status(200).json(result)
+  } catch(err) {
+    next(err)
+  }
+
 })
 
 
@@ -54,8 +64,16 @@ router.post('/register', checkPasswordLength, checkUsernameFree, (req, res, next
     "message": "Invalid credentials"
   }
  */
-  router.post('/login', checkUsernameExists, (req, res, next) => {//eslint-disable-line
-    res.json('login configured')
+  router.post('/login', checkUsernameExists, async (req, res, next) => {
+    const { username, password } = req.body
+    const [user] = await User.findBy({ username })
+    if(bcrypt.compareSync(password, user.password)){
+      req.session.user = user
+      res.json({ status: 200, message: `Welcome, ${user.username}`})
+    } else {
+      next({ status: 401, message: 'Invalid credentials'})
+    }
+
   })
 
 /**

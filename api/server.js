@@ -23,7 +23,8 @@ const sessionConfig = {
   cookie: {
     maxAge: 1000 * 60 * 60,
     secure: false,
-    httpOnly: false
+    httpOnly: true,
+    // sameSite: 'none'
   },
   rolling: true,
   resave: false,
@@ -40,10 +41,10 @@ const sessionConfig = {
 
 const server = express();
 
+server.use(session(sessionConfig))
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
-server.use(session(sessionConfig))
 server.use('/api/users', userRouter)
 server.use('/api/auth', authRouter)
 
