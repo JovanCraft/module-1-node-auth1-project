@@ -23,7 +23,7 @@ async function restricted(req, res, next) {
   }
 */
 function checkUsernameFree() {
-
+  console.log('checkUsernameFree wired')
 }
 
 /*
@@ -35,7 +35,7 @@ function checkUsernameFree() {
   }
 */
 function checkUsernameExists() {
-
+  console.log('checkUsernameExists wired')
 }
 
 /*
@@ -47,11 +47,13 @@ function checkUsernameExists() {
   }
 */
 function checkPasswordLength() {
-
+  console.log('checkPasswordLength wired')
 }
-
 // Don't forget to add these to the `exports` object so they can be required in other modules
 
 module.exports = {
   restricted,
+  checkUsernameFree,
+  checkUsernameExists,
+  checkPasswordLength
 }
