@@ -48,8 +48,18 @@ async function checkUsernameFree(req, res, next) {
     "message": "Invalid credentials"
   }
 */
-function checkUsernameExists(req, res, next) {
-  next()
+async function checkUsernameExists(req, res, next) {
+  try {
+    const { username } = req.body
+    const users = await User.findBy({ username })
+    if(users.length){
+      next()
+    } else {
+      next({ status: 401, message: 'Invalid credentials'})
+    }
+  } catch(err) {
+    next(err)
+  }
 }
 
 /*
@@ -61,6 +71,7 @@ function checkUsernameExists(req, res, next) {
   }
 */
 function checkPasswordLength(req, res, next) {
+  
   next()
 }
 // Don't forget to add these to the `exports` object so they can be required in other modules
