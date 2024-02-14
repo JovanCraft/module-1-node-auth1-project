@@ -7,11 +7,13 @@
   }
 */
 async function restricted(req, res, next) {
-  if(req.session.user){
-    next()
-  } else {
-    next({ status: 401, message: 'You shall not pass!'})
-  }
+  // if(req.session.user){
+  //   next()
+  // } else {
+  //   next({ status: 401, message: 'You shall not pass!'})
+  // }
+  console.log('restricted middleware is wired')
+  next()
 }
 
 /*
@@ -22,8 +24,8 @@ async function restricted(req, res, next) {
     "message": "Username taken"
   }
 */
-function checkUsernameFree() {
-  console.log('checkUsernameFree wired')
+function checkUsernameFree(req, res, next) {
+  next()
 }
 
 /*
@@ -34,8 +36,8 @@ function checkUsernameFree() {
     "message": "Invalid credentials"
   }
 */
-function checkUsernameExists() {
-  console.log('checkUsernameExists wired')
+function checkUsernameExists(req, res, next) {
+  next()
 }
 
 /*
@@ -46,8 +48,8 @@ function checkUsernameExists() {
     "message": "Password must be longer than 3 chars"
   }
 */
-function checkPasswordLength() {
-  console.log('checkPasswordLength wired')
+function checkPasswordLength(req, res, next) {
+  next()
 }
 // Don't forget to add these to the `exports` object so they can be required in other modules
 
